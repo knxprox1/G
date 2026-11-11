@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  html, body {
+    height: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+    touch-action: manipulation;
+    font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #fbf0f2;
+    color: #2e1d24;
+  }
+}
+
+/* Luxury Bright Silk & Frosted Glass Utilities */
+.velvet-card {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(244, 114, 140, 0.28);
+  box-shadow: 0 15px 40px -10px rgba(225, 29, 72, 0.1), 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.velvet-card-active {
+  border-color: rgba(244, 63, 94, 0.55);
+  box-shadow: 0 20px 50px -10px rgba(225, 29, 72, 0.2), 0 0 25px rgba(244, 114, 140, 0.25);
+}
+
+.candle-glow {
+  background: radial-gradient(circle at center, rgba(254, 205, 211, 0.4) 0%, rgba(253, 164, 175, 0.2) 40%, transparent 70%);
+}
+
+.sensual-glow {
+  box-shadow: 0 0 35px -5px rgba(225, 29, 72, 0.25);
+}
+
+.gold-border {
+  border-color: rgba(225, 29, 72, 0.3);
+}
+
+/* Perspective for 3D card flips */
+.perspective-1000 {
+  perspective: 1000px;
+}

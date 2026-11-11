@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix Remix تناغم - لعبة الأزواج",
+  "description": "نموذج أولي متعدد الشاشات بدون تمرير للعبة حميمية هادئة تعزز التوافق والتواصل بين الشريكين",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
