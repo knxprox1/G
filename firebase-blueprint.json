@@ -1,0 +1,214 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private per-user cloud sync profile storing device identity, fixed role, and linked couple vault ID.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["wife", "husband"]
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24
+        },
+        "deviceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "vaultId": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^(|[a-zA-Z0-9_\\-]{8,64})$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "role", "displayName", "deviceId", "vaultId", "createdAt", "updatedAt"]
+    },
+    "CoupleVault": {
+      "title": "CoupleVault",
+      "description": "End-to-end AES-GCM encrypted 2-member couple cloud sync vault shared strictly between wife and husband.",
+      "type": "object",
+      "properties": {
+        "vaultId": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "wifeUid": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^(|[a-zA-Z0-9_\\-]+)$"
+        },
+        "husbandUid": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^(|[a-zA-Z0-9_\\-]+)$"
+        },
+        "memberUids": {
+          "type": "array",
+          "description": "Bounded membership list (max 2: wife and husband UIDs)."
+        },
+        "wifeName": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "husbandName": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "joinTokenHash": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "joinProofHash": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^(|[0-9a-f]{64})$"
+        },
+        "cipherText": {
+          "type": "string",
+          "maxLength": 131072
+        },
+        "cipherIv": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "sourceDeviceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "clientUpdatedAt": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "vaultId",
+        "ownerUid",
+        "wifeUid",
+        "husbandUid",
+        "memberUids",
+        "wifeName",
+        "husbandName",
+        "joinTokenHash",
+        "joinProofHash",
+        "cipherText",
+        "cipherIv",
+        "sourceDeviceId",
+        "clientUpdatedAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatMessageDoc": {
+      "title": "ChatMessageDoc",
+      "description": "End-to-end AES-256-GCM encrypted live chat message inside a couple vault.",
+      "type": "object",
+      "properties": {
+        "messageId": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "vaultId": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "senderUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "senderRole": {
+          "type": "string",
+          "enum": ["wife", "husband"]
+        },
+        "senderDeviceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "cipherText": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 4096
+        },
+        "cipherIv": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 64
+        },
+        "clientCreatedAt": {
+          "type": "integer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "messageId",
+        "vaultId",
+        "senderUid",
+        "senderRole",
+        "senderDeviceId",
+        "cipherText",
+        "cipherIv",
+        "clientCreatedAt",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile linking the verified Google account to a role and couple vault."
+    },
+    "/vaults/{vaultId}": {
+      "schema": { "$ref": "#/entities/CoupleVault" },
+      "description": "Private E2EE couple cloud sync vault storing AES-GCM encrypted answer snapshots."
+    },
+    "/vaults/{vaultId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessageDoc" },
+      "description": "Private E2EE live chat messages subcollection shared strictly between vault members."
+    }
+  }
+}

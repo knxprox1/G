@@ -1,0 +1,8 @@
+{
+  "name": "ليالي الورد",
+  "description": "لعبة أسئلة تفاعلية حصرية للهاتف بمستوى تصميم عالمي موجهة للزوجة عبر عوالم متعددة وخيارات تفاعلية.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

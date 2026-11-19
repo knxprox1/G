@@ -1,0 +1,1092 @@
+@import "tailwindcss";
+
+:root {
+  --ad-canvas: #ffe8f0;
+  --ad-blush: #ffd5e4;
+  --ad-porcelain: #fff7fa;
+  --ad-plum: #360d21;
+  --ad-mauve: #5e364a;
+  --ad-rose: #d6286c;
+  --ad-rose-deep: #ab1b53;
+  --ad-danger: #b92859;
+  --ad-rose-soft: #ffc6dc;
+  --ad-rose-gold: #d69a86;
+  --ad-rose-gold-soft: #ffe0d4;
+  --ad-pearl-gold: #fff4ec;
+  --ad-border: rgba(214, 40, 108, 0.24);
+  --ad-dur-fast: 160ms;
+  --ad-dur-ui: 220ms;
+  --ad-dur-screen: 260ms;
+  --ad-dur-modal: 240ms;
+  --ad-ease-silk: cubic-bezier(0.16, 1, 0.3, 1);
+  --ad-ease-exit: cubic-bezier(0.32, 0, 0.4, 1);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background-color: var(--ad-canvas);
+    color: var(--ad-plum);
+    font-family: "Tajawal", system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #360d21;
+    outline-offset: 2px;
+  }
+}
+
+.font-display-ar {
+  font-family: "Baloo Bhaijaan 2", "Tajawal", sans-serif;
+}
+
+.font-display-en {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.tabular-nums-ar {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lush multi-layered rose-pink silk canvas backdrop */
+.ad-rose-silk-bg {
+  background-color: #ffe9f1;
+  background-image:
+    radial-gradient(ellipse 88% 58% at 90% 4%, rgba(232, 62, 132, 0.28) 0%, transparent 62%),
+    radial-gradient(ellipse 92% 62% at 8% 95%, rgba(240, 96, 152, 0.34) 0%, transparent 64%),
+    radial-gradient(circle at 50% 44%, rgba(255, 245, 249, 0.92) 0%, rgba(255, 212, 229, 0.65) 100%);
+}
+
+/* Ornamental rose petal & diamond filigree lattice */
+.ad-petal-lattice {
+  background-image:
+    radial-gradient(rgba(214, 40, 108, 0.11) 1.1px, transparent 1.1px),
+    linear-gradient(135deg, rgba(214, 40, 108, 0.045) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(214, 40, 108, 0.03) 25%, transparent 25%);
+  background-size: 22px 22px, 44px 44px, 44px 44px;
+}
+
+/* Boldness Tier 2: Warm Twilight Rose Dusk */
+.ad-tier-dusk-bg {
+  background-color: #f6c8da;
+  background-image:
+    radial-gradient(ellipse 88% 58% at 88% 6%, rgba(190, 28, 92, 0.24) 0%, transparent 62%),
+    radial-gradient(ellipse 92% 62% at 10% 94%, rgba(154, 18, 76, 0.26) 0%, transparent 64%),
+    radial-gradient(circle at 50% 44%, rgba(255, 232, 241, 0.88) 0%, rgba(244, 184, 210, 0.72) 100%);
+}
+
+/* Boldness Tier 3: Intimate Velvet After-Dark Burgundy */
+.ad-tier-velvet-bg {
+  background-color: #240614;
+  background-image:
+    radial-gradient(ellipse 90% 56% at 86% 6%, rgba(226, 56, 125, 0.32) 0%, transparent 64%),
+    radial-gradient(ellipse 94% 64% at 12% 94%, rgba(180, 24, 88, 0.34) 0%, transparent 66%),
+    radial-gradient(circle at 50% 42%, rgba(74, 14, 41, 0.92) 0%, rgba(30, 4, 15, 0.98) 100%);
+}
+
+.ad-petal-lattice-velvet {
+  background-image:
+    radial-gradient(rgba(255, 198, 222, 0.14) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(255, 166, 204, 0.05) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(255, 166, 204, 0.035) 25%, transparent 25%);
+  background-size: 22px 22px, 44px 44px, 44px 44px;
+}
+
+.ad-velvet-stage button:focus-visible {
+  outline: 2px solid #ffd4e5;
+  outline-offset: 2px;
+}
+
+/* Bespoke asymmetric architectural corner motif */
+.ad-cut-card {
+  border-radius: 30px 10px 30px 10px;
+}
+
+.ad-cut-tile {
+  border-radius: 22px 8px 22px 8px;
+}
+
+.ad-cut-chip {
+  border-radius: 14px 5px 14px 5px;
+}
+
+/* Safe area padding helpers */
+.pt-safe {
+  padding-top: max(0.85rem, env(safe-area-inset-top));
+}
+
+.pb-safe {
+  padding-bottom: max(0.85rem, env(safe-area-inset-bottom));
+}
+
+/* Bottom clearance above BottomNavDock protruding 14px crown rose */
+.pb-nav-dock {
+  padding-bottom: max(1.75rem, calc(env(safe-area-inset-bottom) + 1.5rem));
+}
+
+/* Safe left clearance below PartnerConnectionBadge */
+.pl-badge-safe {
+  padding-left: 7.5rem;
+}
+
+@media (min-width: 640px) {
+  .pl-badge-safe {
+    padding-left: 7.75rem;
+  }
+}
+
+/* Unified frosted rose-plum modal backdrop */
+.ad-modal-backdrop {
+  background-color: rgba(36, 7, 22, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+/* GPU-only silky shimmer sheen for primary rose buttons */
+.ad-shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ad-shimmer-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.28) 48%,
+    transparent 100%
+  );
+  transform: translateX(260%);
+  animation: adSheenSweep 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes adSheenSweep {
+  0%, 62% {
+    transform: translateX(260%);
+  }
+  84%, 100% {
+    transform: translateX(-180%);
+  }
+}
+
+@keyframes adFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes adPetalDrift {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -14px, 0) rotate(0deg) scale(0.85);
+  }
+  18% {
+    opacity: 0.72;
+  }
+  82% {
+    opacity: 0.52;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-18px, 68px, 0) rotate(36deg) scale(1);
+  }
+}
+
+@keyframes adMoteTwinkle {
+  0%, 100% {
+    opacity: 0.18;
+    transform: scale(0.82);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.18);
+  }
+}
+
+@keyframes adHaloBreathe {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes adScaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes adScreenCurtainIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adScreenForward {
+  from {
+    opacity: 0;
+    transform: translate3d(-12px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes adScreenBack {
+  from {
+    opacity: 0;
+    transform: translate3d(12px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes adContentSwap {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes adToastIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adPinShake {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  18% {
+    transform: translate3d(-6px, 0, 0);
+  }
+  36% {
+    transform: translate3d(6px, 0, 0);
+  }
+  54% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  72% {
+    transform: translate3d(4px, 0, 0);
+  }
+  88% {
+    transform: translate3d(-2px, 0, 0);
+  }
+}
+
+@keyframes adBroochIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.75);
+  }
+  to {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes adMessageIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adWaitingPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.84);
+  }
+}
+
+@keyframes adScreenCurtainOut {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.985);
+  }
+}
+
+@keyframes adChromeTopIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes adChromeBottomIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes adQuestionNumberWhisper {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.76);
+  }
+  24% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  48% {
+    opacity: 0.96;
+    transform: translate3d(0, -2px, 0) scale(1.03);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -14px, 0) scale(1.12);
+  }
+}
+
+@keyframes adQuestionNumberGlow {
+  0% {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  26% {
+    opacity: 0.88;
+    transform: scale(1);
+  }
+  52% {
+    opacity: 0.65;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes adQuestionOpen {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.955);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adChoiceItemSlideIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adVelvetChoiceSettle {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes adVelvetStageExit {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -14px, 0) scale(0.94);
+  }
+}
+
+@keyframes adVelvetSkipExit {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-34px, 0, 0) scale(0.945);
+  }
+}
+
+@keyframes adCompletionBloom {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adLevelCompleteNoticeIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0) scale(0.88);
+  }
+  58% {
+    opacity: 1;
+    transform: translate3d(0, -3px, 0) scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adLevelCompleteRingPulse {
+  0% {
+    opacity: 0.78;
+    transform: scale(0.82);
+  }
+  70% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+@keyframes adQissasaRoyalEmerge {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.83);
+  }
+  55% {
+    opacity: 0.92;
+    transform: translate3d(0, 3px, 0) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adQissasaCrestIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.26) translate3d(0, 4px, 0);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(0.96) translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes adQissasaSilkShimmer {
+  0% {
+    opacity: 0;
+    transform: translateX(210%);
+  }
+  28% {
+    opacity: 0.65;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-110%);
+  }
+}
+
+@keyframes adQissasaRoyalDissolve {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -16px, 0) scale(0.94);
+  }
+}
+
+@keyframes adQissasaPedestalIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adCenterRoseAura {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  28% {
+    opacity: 0.92;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+@keyframes adCenterPetalScatter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.3) rotate(0deg);
+  }
+  18% {
+    opacity: 0.98;
+    transform: translate3d(calc(var(--px, 0px) * 0.24), calc(var(--py, 0px) * 0.24), 0)
+      scale(1.06) rotate(calc(var(--pr, 45deg) * 0.25));
+  }
+  72% {
+    opacity: 0.88;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--px, 0px), var(--py, -140px), 0) scale(0.9)
+      rotate(var(--pr, 90deg));
+  }
+}
+
+@keyframes adBackdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adBackdropOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes adSheetSlideUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes adSheetSlideDown {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0) scale(0.985);
+  }
+}
+
+.ad-anim-fade-up {
+  animation: adFadeUp 0.46s var(--ad-ease-silk) both;
+}
+
+.ad-anim-scale-in {
+  animation: adScaleIn var(--ad-dur-modal) var(--ad-ease-silk) both;
+}
+
+.ad-anim-scale-out {
+  animation: adScaleOut 170ms var(--ad-ease-exit) forwards;
+}
+
+.ad-anim-screen-curtain {
+  animation: adScreenCurtainIn var(--ad-dur-ui) ease-out both;
+}
+
+.ad-anim-screen-forward {
+  animation: adScreenForward var(--ad-dur-screen) var(--ad-ease-silk) both;
+}
+
+.ad-anim-screen-back {
+  animation: adScreenBack var(--ad-dur-screen) var(--ad-ease-silk) both;
+}
+
+.ad-anim-content-swap {
+  animation: adContentSwap var(--ad-dur-ui) var(--ad-ease-silk) both;
+}
+
+.ad-anim-toast-in {
+  animation: adToastIn 180ms var(--ad-ease-silk) both;
+}
+
+.ad-anim-shake {
+  animation: adPinShake 280ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.ad-anim-brooch-in {
+  animation: adBroochIn 220ms var(--ad-ease-silk) both;
+}
+
+.ad-anim-message-in {
+  animation: adMessageIn 220ms var(--ad-ease-silk) both;
+}
+
+.ad-anim-waiting-pulse {
+  animation: adWaitingPulse 2.2s ease-in-out infinite;
+}
+
+.ad-anim-screen-exit {
+  animation: adScreenCurtainOut 0.42s cubic-bezier(0.32, 0.04, 0.24, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.ad-anim-chrome-top {
+  animation: adChromeTopIn 0.72s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both;
+}
+
+.ad-anim-chrome-bottom {
+  animation: adChromeBottomIn 0.76s cubic-bezier(0.16, 1, 0.3, 1) 0.14s both;
+}
+
+.ad-anim-number-whisper {
+  animation: adQuestionNumberWhisper 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-number-whisper-delayed {
+  animation: adQuestionNumberWhisper 0.62s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-number-glow {
+  animation: adQuestionNumberGlow 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-number-glow-delayed {
+  animation: adQuestionNumberGlow 0.62s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-question-open {
+  animation: adQuestionOpen 0.52s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-choice-item {
+  animation: adChoiceItemSlideIn 0.46s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  will-change: transform, opacity;
+}
+
+.ad-anim-choices-settle {
+  animation: adVelvetChoiceSettle 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-silk-exit {
+  animation: adVelvetStageExit 0.46s cubic-bezier(0.25, 0.08, 0.25, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.ad-anim-silk-skip-exit {
+  animation: adVelvetSkipExit 0.46s cubic-bezier(0.25, 0.08, 0.25, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.ad-anim-completion-bloom {
+  animation: adCompletionBloom 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-completion-crest {
+  animation: adQissasaCrestIn 0.58s cubic-bezier(0.34, 1.35, 0.64, 1) 0.12s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-qissasa-emerge {
+  animation: adQissasaRoyalEmerge 0.68s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-qissasa-crest {
+  animation: adQissasaCrestIn 0.58s cubic-bezier(0.34, 1.35, 0.64, 1) 0.24s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-qissasa-shimmer {
+  animation: adQissasaSilkShimmer 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.36s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-qissasa-pedestal {
+  animation: adQissasaPedestalIn 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-qissasa-dissolve {
+  animation: adQissasaRoyalDissolve 0.48s cubic-bezier(0.25, 0.08, 0.25, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.ad-anim-level-complete-notice {
+  animation: adLevelCompleteNoticeIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.14s both;
+  will-change: transform, opacity;
+}
+
+.ad-anim-level-complete-ring {
+  animation: adLevelCompleteRingPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s infinite;
+}
+
+.ad-anim-center-aura {
+  animation: adCenterRoseAura 2.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.ad-anim-center-petal {
+  animation: adCenterPetalScatter var(--p-dur, 2.55s) cubic-bezier(0.16, 1, 0.3, 1) var(--p-delay, 0ms) forwards;
+  will-change: transform, opacity;
+}
+
+.ad-option-pill {
+  transition:
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 240ms ease;
+}
+
+.ad-anim-backdrop {
+  animation: adBackdropIn 190ms ease-out both;
+}
+
+.ad-anim-backdrop-out {
+  animation: adBackdropOut 160ms var(--ad-ease-exit) forwards;
+}
+
+.ad-anim-sheet-up {
+  animation: adSheetSlideUp 280ms var(--ad-ease-silk) both;
+}
+
+.ad-anim-sheet-down {
+  animation: adSheetSlideDown 170ms var(--ad-ease-exit) forwards;
+}
+
+.ad-anim-petal {
+  animation: adPetalDrift var(--petal-dur, 9s) ease-in-out var(--petal-delay, 0s) infinite;
+}
+
+.ad-anim-twinkle {
+  animation: adMoteTwinkle var(--twinkle-dur, 4.2s) ease-in-out var(--twinkle-delay, 0s) infinite;
+}
+
+.ad-anim-halo {
+  animation: adHaloBreathe 5.5s ease-in-out infinite;
+}
+
+@keyframes adHomePetalFallA {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -48px, 0) rotate(-18deg) scaleX(0.92);
+  }
+  10% {
+    opacity: var(--petal-opacity, 0.68);
+  }
+  32% {
+    transform: translate3d(22px, 245px, 0) rotate(26deg) scaleX(0.74);
+  }
+  62% {
+    transform: translate3d(-16px, 535px, 0) rotate(78deg) scaleX(0.98);
+  }
+  88% {
+    opacity: var(--petal-opacity, 0.58);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(14px, 890px, 0) rotate(132deg) scaleX(0.8);
+  }
+}
+
+@keyframes adHomePetalFallB {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -52px, 0) rotate(16deg) scaleX(0.88);
+  }
+  12% {
+    opacity: var(--petal-opacity, 0.62);
+  }
+  36% {
+    transform: translate3d(-24px, 275px, 0) rotate(-32deg) scaleX(0.72);
+  }
+  68% {
+    transform: translate3d(18px, 585px, 0) rotate(-84deg) scaleX(0.96);
+  }
+  88% {
+    opacity: var(--petal-opacity, 0.54);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-12px, 900px, 0) rotate(-128deg) scaleX(0.78);
+  }
+}
+
+@keyframes adHomePetalFallC {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -44px, 0) rotate(-32deg) scaleX(0.95);
+  }
+  10% {
+    opacity: var(--petal-opacity, 0.6);
+  }
+  38% {
+    transform: translate3d(14px, 300px, 0) rotate(14deg) scaleX(0.68);
+  }
+  70% {
+    transform: translate3d(-22px, 610px, 0) rotate(68deg) scaleX(0.94);
+  }
+  89% {
+    opacity: var(--petal-opacity, 0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(6px, 895px, 0) rotate(106deg) scaleX(0.84);
+  }
+}
+
+.ad-home-petal-a {
+  animation: adHomePetalFallA var(--petal-dur, 10s) linear var(--petal-delay, 0s) infinite;
+}
+
+.ad-home-petal-b {
+  animation: adHomePetalFallB var(--petal-dur, 11.5s) linear var(--petal-delay, 0s) infinite;
+}
+
+.ad-home-petal-c {
+  animation: adHomePetalFallC var(--petal-dur, 9.5s) linear var(--petal-delay, 0s) infinite;
+}
+
+@keyframes adSealAuraBreathe {
+  0%, 100% {
+    opacity: 0.42;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.78;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes adSealOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes adSealRippleOut {
+  0% {
+    opacity: 0.92;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+@keyframes adSealPetalBurst {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.75) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--bx, 0px), var(--by, -56px), 0) scale(1.1) rotate(var(--br, 45deg));
+  }
+}
+
+@keyframes adSealShadowFloat {
+  0%, 100% {
+    opacity: 0.36;
+    transform: scaleX(1) scaleY(1);
+  }
+  50% {
+    opacity: 0.18;
+    transform: scaleX(0.8) scaleY(0.84);
+  }
+}
+
+/* Keep clickable seal target anchored while shadow/aura gently breathe */
+.ad-seal-aura {
+  animation: adSealAuraBreathe 3.8s ease-in-out infinite;
+}
+
+.ad-seal-float {
+  transform: translate3d(0, 0, 0);
+}
+
+.ad-seal-shadow-float {
+  animation: adSealShadowFloat 3.6s ease-in-out infinite;
+}
+
+.ad-seal-orbit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: adSealOrbit 24s linear infinite;
+}
+
+.ad-seal-ripple {
+  animation: adSealRippleOut 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.ad-seal-burst-petal {
+  animation: adSealPetalBurst 1.12s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.ad-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.ad-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.ad-paused-animations *,
+.ad-paused-animations *::before,
+.ad-paused-animations *::after {
+  animation-play-state: paused !important;
+}
+
+.ad-motion-off *,
+.ad-motion-off *::before,
+.ad-motion-off *::after {
+  animation: none !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+.ad-motion-off .ad-shimmer-btn::after {
+  display: none !important;
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ad-shimmer-btn::after {
+    display: none !important;
+    animation: none !important;
+  }
+
+  .ad-anim-petal,
+  .ad-anim-twinkle,
+  .ad-anim-halo,
+  .ad-anim-level-complete-ring,
+  .ad-anim-waiting-pulse,
+  .ad-home-petal-a,
+  .ad-home-petal-b,
+  .ad-home-petal-c,
+  .ad-seal-aura,
+  .ad-seal-orbit,
+  .ad-seal-shadow-float,
+  .animate-spin {
+    animation: none !important;
+  }
+}

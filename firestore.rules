@@ -1,0 +1,408 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 1 / Safety Net: Default-deny all paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedEmail() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 64 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidSha256Hex(val) {
+      return val is string && val.size() == 64 && val.matches('^[0-9a-f]{64}$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function getVaultData(vaultId) {
+      return get(/databases/$(database)/documents/vaults/$(vaultId)).data;
+    }
+
+    function isVaultMember(vaultId) {
+      return exists(/databases/$(database)/documents/vaults/$(vaultId))
+        && (
+          request.auth.uid == getVaultData(vaultId).ownerUid ||
+          request.auth.uid == getVaultData(vaultId).wifeUid ||
+          request.auth.uid == getVaultData(vaultId).husbandUid
+        );
+    }
+
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'role', 'displayName', 'deviceId', 'vaultId', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'role', 'displayName', 'deviceId', 'vaultId', 'createdAt', 'updatedAt'])
+        && isValidId(data.uid)
+        && data.uid == userId
+        && data.uid == request.auth.uid
+        && data.role in ['wife', 'husband']
+        && data.displayName is string
+        && data.displayName.size() >= 1
+        && data.displayName.size() <= 24
+        && data.deviceId is string
+        && data.deviceId.size() >= 1
+        && data.deviceId.size() <= 64
+        && data.vaultId is string
+        && (data.vaultId == '' || (data.vaultId.size() >= 8 && data.vaultId.size() <= 64 && data.vaultId.matches('^[a-zA-Z0-9_\\-]+$')))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidVault(data, vaultId) {
+      return data.keys().hasAll([
+          'vaultId',
+          'ownerUid',
+          'wifeUid',
+          'husbandUid',
+          'memberUids',
+          'wifeName',
+          'husbandName',
+          'joinTokenHash',
+          'joinProofHash',
+          'cipherText',
+          'cipherIv',
+          'sourceDeviceId',
+          'clientUpdatedAt',
+          'createdAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'vaultId',
+          'ownerUid',
+          'wifeUid',
+          'husbandUid',
+          'memberUids',
+          'wifeName',
+          'husbandName',
+          'joinTokenHash',
+          'joinProofHash',
+          'cipherText',
+          'cipherIv',
+          'sourceDeviceId',
+          'clientUpdatedAt',
+          'createdAt',
+          'updatedAt'
+        ])
+        && isValidId(vaultId)
+        && vaultId.size() >= 8
+        && data.vaultId == vaultId
+        && isValidId(data.ownerUid)
+        && data.wifeUid is string
+        && data.wifeUid.size() <= 64
+        && (data.wifeUid == '' || data.wifeUid.matches('^[a-zA-Z0-9_\\-]+$'))
+        && data.husbandUid is string
+        && data.husbandUid.size() <= 64
+        && (data.husbandUid == '' || data.husbandUid.matches('^[a-zA-Z0-9_\\-]+$'))
+        && (data.wifeUid != '' || data.husbandUid != '')
+        && data.wifeUid != data.husbandUid
+        && data.memberUids is list
+        && data.memberUids.size() >= 1
+        && data.memberUids.size() <= 2
+        && data.memberUids[0] is string
+        && (data.memberUids.size() == 1 || data.memberUids[1] is string)
+        && data.wifeName is string
+        && data.wifeName.size() <= 24
+        && data.husbandName is string
+        && data.husbandName.size() <= 24
+        && isValidSha256Hex(data.joinTokenHash)
+        && data.joinProofHash is string
+        && (data.joinProofHash == '' || isValidSha256Hex(data.joinProofHash))
+        && data.cipherText is string
+        && data.cipherText.size() <= 131072
+        && data.cipherIv is string
+        && data.cipherIv.size() <= 64
+        && data.sourceDeviceId is string
+        && data.sourceDeviceId.size() >= 1
+        && data.sourceDeviceId.size() <= 64
+        && data.clientUpdatedAt is int
+        && data.clientUpdatedAt >= 0
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidChatMessage(data, vaultId, messageId) {
+      return data.keys().hasAll([
+          'messageId',
+          'vaultId',
+          'senderUid',
+          'senderRole',
+          'senderDeviceId',
+          'cipherText',
+          'cipherIv',
+          'clientCreatedAt',
+          'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'messageId',
+          'vaultId',
+          'senderUid',
+          'senderRole',
+          'senderDeviceId',
+          'cipherText',
+          'cipherIv',
+          'clientCreatedAt',
+          'createdAt'
+        ])
+        && isValidId(messageId)
+        && messageId.size() >= 4
+        && data.messageId == messageId
+        && isValidId(vaultId)
+        && vaultId.size() >= 8
+        && data.vaultId == vaultId
+        && isValidId(data.senderUid)
+        && data.senderUid == request.auth.uid
+        && data.senderRole in ['wife', 'husband']
+        && data.senderDeviceId is string
+        && data.senderDeviceId.size() >= 1
+        && data.senderDeviceId.size() <= 64
+        && data.cipherText is string
+        && data.cipherText.size() >= 8
+        && data.cipherText.size() <= 4096
+        && data.cipherIv is string
+        && data.cipherIv.size() >= 8
+        && data.cipherIv.size() <= 64
+        && data.clientCreatedAt is int
+        && data.clientCreatedAt >= 0
+        && data.createdAt is timestamp;
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn()
+        && isVerifiedEmail()
+        && isValidId(userId)
+        && request.auth.uid == userId;
+
+      allow list: if false;
+
+      allow create: if isSignedIn()
+        && isVerifiedEmail()
+        && isValidId(userId)
+        && request.auth.uid == userId
+        && isValidUserProfile(incoming(), userId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isSignedIn()
+        && isVerifiedEmail()
+        && isValidId(userId)
+        && request.auth.uid == userId
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().role == existing().role
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName',
+          'deviceId',
+          'vaultId',
+          'updatedAt'
+        ]);
+
+      allow delete: if isSignedIn()
+        && isVerifiedEmail()
+        && isValidId(userId)
+        && request.auth.uid == userId;
+    }
+
+    match /vaults/{vaultId} {
+      allow get: if isSignedIn()
+        && isVerifiedEmail()
+        && isValidId(vaultId)
+        && vaultId.size() >= 8
+        && (
+          request.auth.uid == resource.data.ownerUid ||
+          request.auth.uid == resource.data.wifeUid ||
+          request.auth.uid == resource.data.husbandUid
+        );
+
+      allow list: if false;
+
+      allow create: if isSignedIn()
+        && isVerifiedEmail()
+        && isValidId(vaultId)
+        && vaultId.size() >= 8
+        && isValidVault(incoming(), vaultId)
+        && incoming().ownerUid == request.auth.uid
+        && incoming().joinProofHash == ''
+        && incoming().memberUids.size() == 1
+        && incoming().memberUids[0] == request.auth.uid
+        && (
+          (incoming().wifeUid == request.auth.uid && incoming().husbandUid == '') ||
+          (incoming().husbandUid == request.auth.uid && incoming().wifeUid == '')
+        )
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+
+      allow update: if isSignedIn()
+        && isVerifiedEmail()
+        && isValidId(vaultId)
+        && vaultId.size() >= 8
+        && isValidVault(incoming(), vaultId)
+        && incoming().vaultId == existing().vaultId
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().joinTokenHash == existing().joinTokenHash
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action: Partner joins open husband slot (must present SHA-256 commitment proof derived from vaultKey)
+          (
+            existing().husbandUid == ''
+            && request.auth.uid != existing().ownerUid
+            && incoming().husbandUid == request.auth.uid
+            && incoming().wifeUid == existing().wifeUid
+            && isValidSha256Hex(incoming().joinProofHash)
+            && incoming().joinProofHash == existing().joinTokenHash
+            && incoming().memberUids.size() == 2
+            && incoming().memberUids[0] == existing().ownerUid
+            && incoming().memberUids[1] == request.auth.uid
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'husbandUid',
+              'husbandName',
+              'memberUids',
+              'joinProofHash',
+              'updatedAt'
+            ])
+          )
+          ||
+          // Action: Partner joins open wife slot (must present SHA-256 commitment proof derived from vaultKey)
+          (
+            existing().wifeUid == ''
+            && request.auth.uid != existing().ownerUid
+            && incoming().wifeUid == request.auth.uid
+            && incoming().husbandUid == existing().husbandUid
+            && isValidSha256Hex(incoming().joinProofHash)
+            && incoming().joinProofHash == existing().joinTokenHash
+            && incoming().memberUids.size() == 2
+            && incoming().memberUids[0] == existing().ownerUid
+            && incoming().memberUids[1] == request.auth.uid
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'wifeUid',
+              'wifeName',
+              'memberUids',
+              'joinProofHash',
+              'updatedAt'
+            ])
+          )
+          ||
+          // Action: Wife pushes encrypted answers snapshot
+          (
+            request.auth.uid == existing().wifeUid
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'wifeName',
+              'cipherText',
+              'cipherIv',
+              'sourceDeviceId',
+              'clientUpdatedAt',
+              'updatedAt'
+            ])
+          )
+          ||
+          // Action: Husband updates own display name in vault
+          (
+            request.auth.uid == existing().husbandUid
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'husbandName',
+              'updatedAt'
+            ])
+          )
+          ||
+          // Action: Non-owner spouse leaves vault cleanly
+          (
+            request.auth.uid == existing().husbandUid
+            && existing().husbandUid != existing().ownerUid
+            && incoming().husbandUid == ''
+            && incoming().husbandName == ''
+            && incoming().joinProofHash == ''
+            && incoming().wifeUid == existing().wifeUid
+            && incoming().memberUids.size() == 1
+            && incoming().memberUids[0] == existing().ownerUid
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'husbandUid',
+              'husbandName',
+              'memberUids',
+              'joinProofHash',
+              'updatedAt'
+            ])
+          )
+          ||
+          (
+            request.auth.uid == existing().wifeUid
+            && existing().wifeUid != existing().ownerUid
+            && incoming().wifeUid == ''
+            && incoming().wifeName == ''
+            && incoming().joinProofHash == ''
+            && incoming().husbandUid == existing().husbandUid
+            && incoming().memberUids.size() == 1
+            && incoming().memberUids[0] == existing().ownerUid
+            && incoming().diff(existing()).affectedKeys().hasOnly([
+              'wifeUid',
+              'wifeName',
+              'memberUids',
+              'joinProofHash',
+              'updatedAt'
+            ])
+          )
+        );
+
+      allow delete: if isSignedIn()
+        && isVerifiedEmail()
+        && isValidId(vaultId)
+        && vaultId.size() >= 8
+        && request.auth.uid == existing().ownerUid;
+
+      match /messages/{messageId} {
+        allow get: if isSignedIn()
+          && isVerifiedEmail()
+          && isValidId(vaultId)
+          && vaultId.size() >= 8
+          && isValidId(messageId)
+          && messageId.size() >= 4
+          && isVaultMember(vaultId);
+
+        allow list: if isSignedIn()
+          && isVerifiedEmail()
+          && isValidId(vaultId)
+          && vaultId.size() >= 8
+          && isVaultMember(vaultId);
+
+        allow create: if isSignedIn()
+          && isVerifiedEmail()
+          && isValidId(vaultId)
+          && vaultId.size() >= 8
+          && isValidId(messageId)
+          && messageId.size() >= 4
+          && isValidChatMessage(incoming(), vaultId, messageId)
+          && incoming().createdAt == request.time
+          && isVaultMember(vaultId)
+          && (
+            (incoming().senderRole == 'wife' && getVaultData(vaultId).wifeUid == request.auth.uid) ||
+            (incoming().senderRole == 'husband' && getVaultData(vaultId).husbandUid == request.auth.uid)
+          );
+
+        allow update: if false;
+
+        allow delete: if isSignedIn()
+          && isVerifiedEmail()
+          && isValidId(vaultId)
+          && vaultId.size() >= 8
+          && isValidId(messageId)
+          && messageId.size() >= 4
+          && isVaultMember(vaultId);
+      }
+    }
+  }
+}
